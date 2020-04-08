@@ -1,6 +1,17 @@
 import sqlite3 as sql
 db = sql.connect("DB\IK.sqlite")
 cur = db.cursor()
-cur.execute("SELECT  count(DISTINCT departman_id)  FROM personeller")
-print(cur.fetchall())
+sorgu = f"""
+SELECT adi,soyadi,email
+  FROM personeller
+ WHERE departman_id IN (
+           SELECT departman_id
+             FROM DEPARTMANLAR
+            WHERE departman_adi = '{input("Sorgulamak istediğiniz departmanı yazınız: ")}'
+       );
+"""
+cur.execute(sorgu)
+for adi,soyadi,email in cur.fetchall():
+    print("Adı: {} Soyadı: {} Email: {}".format (adi,soyadi,email))
+
 
